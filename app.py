@@ -311,7 +311,7 @@ def reply_result_message():
         astro_id = all_astros[your_astro]
         today = datetime.now().strftime("%Y-%m-%d")
         reply_content = ''
-        reply_message = f"【{time_selection}{your_astro}運勢】\n"
+        reply_message = f"【{time_selection}{your_astro}運勢】"
 
         # 今日
         if time_selection == "今日":
@@ -320,11 +320,22 @@ def reply_result_message():
             response = requests.get(url)
             response.encoding = "utf-8"
             soup = BeautifulSoup(response.text, "html.parser")
+            # 子標題
+            overall = soup.find("span", {"class": "txt_green"}).text.strip()
+            love = soup.find("span", {"class": "txt_pink"}).text.strip()
+            career = soup.find("span", {"class": "txt_blue"}).text.strip()
+            finance = soup.find("span", {"class": "txt_orange"}).text.strip()
+            # 子標題內容
             all_content = soup.find(
                 "div", {"class": "TODAY_CONTENT"})
-            for p in all_content.find_all('p'):
-                reply_content += p.text.strip() + '\n'
-            reply_content = reply_content.rstrip('\n')
+            all_p = all_content.find_all('p')
+
+            overall_content = all_p[1].text
+            love_content = all_p[3].text
+            career_content = all_p[-3].text
+            finance_content = all_p[-1].text
+            # reply_content += p.text.strip() + '\n'
+            # reply_content = reply_content.rstrip('\n')
 
         # 明日
         elif time_selection == "明日":
@@ -335,11 +346,24 @@ def reply_result_message():
             response = requests.get(url)
             response.encoding = "utf-8"
             soup = BeautifulSoup(response.text, "html.parser")
+            overall = soup.find("span", {"class": "txt_green"}).text.strip()
+            love = soup.find("span", {"class": "txt_pink"}).text.strip()
+            career = soup.find("span", {"class": "txt_blue"}).text.strip()
+            finance = soup.find("span", {"class": "txt_orange"}).text.strip()
+            # 子標題內容
             all_content = soup.find(
                 "div", {"class": "TODAY_CONTENT"})
-            for p in all_content.find_all('p'):
-                reply_content += p.text.strip() + '\n'
-            reply_content = reply_content.rstrip('\n')
+            all_p = all_content.find_all('p')
+
+            overall_content = all_p[1].text
+            love_content = all_p[3].text
+            career_content = all_p[-3].text
+            finance_content = all_p[-1].text
+            # all_content = soup.find(
+            #     "div", {"class": "TODAY_CONTENT"})
+            # for p in all_content.find_all('p'):
+            #     reply_content += p.text.strip() + '\n'
+            # reply_content = reply_content.rstrip('\n')
 
         # 本周
         elif time_selection == "本周":
@@ -348,11 +372,24 @@ def reply_result_message():
             response = requests.get(url)
             response.encoding = "utf-8"
             soup = BeautifulSoup(response.text, "html.parser")
+            overall = soup.find("span", {"class": "txt_green"}).text.strip()
+            love = soup.find("span", {"class": "txt_pink"}).text.strip()
+            career = soup.find("span", {"class": "txt_blue"}).text.strip()
+            finance = soup.find("span", {"class": "txt_orange"}).text.strip()
+            # 子標題內容
             all_content = soup.find(
                 "div", {"class": "TODAY_CONTENT"})
-            for p in all_content.find_all('p'):
-                reply_content += p.text.strip() + '\n'
-            reply_content = reply_content.rstrip('\n')
+            all_p = all_content.find_all('p')
+
+            overall_content = all_p[1].text
+            love_content = all_p[3].text
+            career_content = all_p[-3].text
+            finance_content = all_p[-1].text
+            # all_content = soup.find(
+            #     "div", {"class": "TODAY_CONTENT"})
+            # for p in all_content.find_all('p'):
+            #     reply_content += p.text.strip() + '\n'
+            # reply_content = reply_content.rstrip('\n')
 
         # 本月
         elif time_selection == "本月":
@@ -361,114 +398,210 @@ def reply_result_message():
             response = requests.get(url)
             response.encoding = "utf-8"
             soup = BeautifulSoup(response.text, "html.parser")
+            overall = soup.find("span", {"class": "txt_green"}).text.strip()
+            love = soup.find("span", {"class": "txt_pink"}).text.strip()
+            career = soup.find("span", {"class": "txt_blue"}).text.strip()
+            finance = soup.find("span", {"class": "txt_orange"}).text.strip()
+            # 子標題內容
             all_content = soup.find(
                 "div", {"class": "TODAY_CONTENT"})
-            for p in all_content.find_all('p'):
-                reply_content += p.text.strip() + '\n'
-            reply_content = reply_content.rstrip('\n')
+            all_p = all_content.find_all('p')
+            overall_content = all_p[1].text
+            love_tmp = all_p[4:6]
+            love_content = ''
+            for p in love_tmp:
+                print(p.text)
+                love_content += p.text + '\n'
+            career_tmp = all_p[-4:-2]
+            career_content = ''
+            for i in career_tmp:
+                print(i.text)
+                career_content += i.text + '\n'
+            finance_content = all_p[-1].text
+            # all_content = soup.find(
+            #     "div", {"class": "TODAY_CONTENT"})
+            # for p in all_content.find_all('p'):
+            #     reply_content += p.text.strip() + '\n'
+            # reply_content = reply_content.rstrip('\n')
 
-    reply_message += f"{reply_content}"
+    # reply_message += f"{reply_content}"
 
-    message = {
-        "type": "text",
-        "text": reply_message
-    }
     # message = {
-    #     "type": "flex",
-    #     "altText": "星座運勢結果",
-    #     "contents": {
-    #         "type": "bubble",
-    #         "body": {
-    #             "type": "box",
-    #             "layout": "vertical",
-    #             "contents": [
-    #                 {
-    #                     "type": "text",
-    #                     "text": reply_message,
-    #                     "weight": "bold",
-    #                     "size": "xl"
-    #                 },
-    #                 {
-    #                     "type": "box",
-    #                     "layout": "baseline",
-    #                     "margin": "md",
-    #                     "contents": [
-    #                         {
-    #                             "type": "text",
-    #                             "text": reply_content,
-    #                             "size": "sm",
-    #                             "color": "#999999",
-    #                             "margin": "md",
-    #                             "flex": 0
-    #                         }
-    #                     ]
-    #                 },
-    #                 {
-    #                     "type": "box",
-    #                     "layout": "vertical",
-    #                     "margin": "lg",
-    #                     "spacing": "sm",
-    #                     "contents": [
-    #                         {
-    #                             "type": "box",
-    #                             "layout": "baseline",
-    #                             "spacing": "sm",
-    #                             "contents": [
-    #                                 {
-    #                                     "type": "text",
-    #                                     "text": "Place",
-    #                                     "color": "#aaaaaa",
-    #                                     "size": "sm",
-    #                                     "flex": 1
-    #                                 },
-
-    #                             ]
-    #                         }
-    #                     ]
-    #                 }
-    #             ]
-    #         }
-    #     }
+    #     "type": "text",
+    #     "text": reply_message
     # }
 
+    message = {
+        "type": "flex",
+        "altText": "星座運勢結果",
+        "contents": {
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": reply_message,
+                        "weight": "bold",
+                        "size": "xl"
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "margin": "md",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": overall,
+                                "size": "md",
+                                "color": "#CC7DE6",
+                                "weight": "bold",
+                                "margin": "md",
+                                "flex": 0,
+                                "wrap": True
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "margin": "md",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": overall_content,
+                                "size": "sm",
+                                "color": "#3B3B3B",
+                                "margin": "md",
+                                "flex": 0,
+                                "wrap": True
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "margin": "md",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": love,
+                                "size": "md",
+                                "color": "#CC7DE6",
+                                "weight": "bold",
+                                "margin": "md",
+                                "flex": 0,
+                                "wrap": True
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "margin": "md",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": love_content.rstrip('\n'),
+                                "size": "sm",
+                                "color": "#3B3B3B",
+                                "margin": "md",
+                                "flex": 0,
+                                "wrap": True
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "margin": "md",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": career,
+                                "size": "md",
+                                "color": "#CC7DE6",
+                                "weight": "bold",
+                                "margin": "md",
+                                "flex": 0,
+                                "wrap": True
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "margin": "md",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": career_content.rstrip('\n'),
+                                "size": "sm",
+                                "color": "#262626",
+                                "margin": "md",
+                                "flex": 0,
+                                "wrap": True
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "margin": "md",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": finance,
+                                "size": "md",
+                                "color": "#CC7DE6",
+                                "weight": "bold",
+                                "margin": "md",
+                                "flex": 0,
+                                "wrap": True
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "margin": "md",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": finance_content,
+                                "size": "sm",
+                                "color": "#262626",
+                                "margin": "md",
+                                "flex": 0,
+                                "wrap": True
+                            }
+                        ]
+                    },
+                    {
+                        "type": "box",
+                        "layout": "baseline",
+                        "margin": "md",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "資料來源：科技紫微網",
+                                "size": "sm",
+                                "color": "#999999",
+                                "margin": "md",
+                                "flex": 0,
+                                "wrap": True
+                            }
+                        ]
+                    },
 
-# message = {
-#     "type": "flex",
-#     "altText": "星座運勢結果",
-#     "contents": {
-#         "type": "bubble",
-#         "body": {
-#             "type": "box",
-#             "layout": "baseline",
-#             "contents": [
-#                 {
-#                     "type": "text",
-#                     'text': reply_message
-#                 },
-#                 {
-#                     "type": "box",
-#                     "layout": "horizontal",
-#                     "contents": [
-#                         {
-#                             "type": "text",
-#                             "text": reply_content,
-#                         }
-#                     ]
-#                 }
-#             ]
-#         }
-#     }
-# }
+                ]
+            }
+        }
+    }
+
     return message
 
-
-# def reply_tomorrow_content():
-# overall = soup.find("span", {"class": "txt_green"}).text.strip()
-# love = soup.find("span", {"class": "txt_pink"}).text.strip()
-# career = soup.find("span", {"class": "txt_blue"}).text.strip()
-# finance = soup.find("span", {"class": "txt_orange"}).text.strip()
-
-# reply_message += f"總運勢：{overall}\n愛情運：{love}\n事業運：{career}\n財運：{finance}\n"
 
 # ========================================================
 

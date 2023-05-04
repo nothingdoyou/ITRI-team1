@@ -9,8 +9,7 @@
             "contents": [
                 {
                     "type": "text",
-                    "text": {re
-                    },
+                    "text": "123",
                     "weight": "bold",
                     "size": "xl"
                 },
